@@ -30,7 +30,7 @@ app.get("/", async (req, res) => {
 
     const sheet = doc.sheetsByIndex[0];
 
-    let limit = { limit: 30 };
+    let limit = { limit: 20 };
 
     const rows = await sheet.getRows(limit);
 
