@@ -32,7 +32,7 @@ app.get("/", async (req, res) => {
 
     let limit = { limit: 50 };
 
-    const rows = await sheet.getRows(limit);
+    const rows = await sheet.getRows();
 
     let lastRow = rows.length + 1;
 
