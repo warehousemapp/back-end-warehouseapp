@@ -26,7 +26,6 @@ exports.create=async (req, res) => {
 
 exports.ready=async (req, res) => {
   try {
-    const { ID,nome } = req.body;
     await doc.useServiceAccountAuth(require('../credentials/google-sheets-api.json'));
     await doc.loadInfo(); // Carrega as infos da planilha
 
@@ -56,7 +55,7 @@ exports.ready=async (req, res) => {
             };
           });
           console.log(users)
-          res.status(200).json({users});
+          res.status(200).json(users);
         } catch (error) {
           res.status(400).json({ success: false })
         }
