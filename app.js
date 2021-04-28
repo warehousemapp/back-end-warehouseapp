@@ -1,24 +1,21 @@
 require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
-const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
-const { GoogleSpreadsheet } = require ('google-spreadsheet');
-const app = express();
 
-app.use(cors());
+
+
+
 
 //Usuarios
 const userRoute = require("./routes/user-route");
 
-//BODY PARSER - EXPRESS LIDAR LIDAR COM REQUISIÇÕES URLENCODED, FACILITAR O ENVIO DE ARQUIVOS
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true, parameterLimit:50000 }));
-//BODY PARSER - EXPRESS LIDAR COM REQUISIÇÕES FORMATO JSON
-app.use(bodyParser.json({ limit: "50mb" }));
+var cors = require('cors');
+const { GoogleSpreadsheet } = require('google-spreadsheet');
+const urlencoder=bodyParser.urlencoded({extended:false});
+const app=express();
 
-
-const doc = new GoogleSpreadsheet('1jVDqLQw3-3mQ4BB59cE7_kW07qInQsjQVCekdeNPa8A');
 
 app.get("/", async (req, res) => {
   try {
