@@ -33,6 +33,8 @@ exports.ready=async (req, res) => {
   
           let limit = { limit: 50 };
 
+          let id=req.params.id;
+
           const rows = await sheet.getRows();
       
           let lastRow = rows.length + 1;
@@ -41,12 +43,12 @@ exports.ready=async (req, res) => {
       
           console.log(total, lastRow);
       
-          const users = rows.map(({ id, image, name,userName,email,password,createdAt,	updatedAt,	active }) => {
+          const users = rows.map(({ id, image, name,username,email,password,createdAt,	updatedAt,	active }) => {
             return {
               id,
               image,
               name,
-              userName,
+              username,
               email,
               password,
               createdAt,
@@ -54,7 +56,7 @@ exports.ready=async (req, res) => {
               active
             };
           });
-          console.log(users)
+          console.log(users,id)
           res.status(200).json(users);
         } catch (error) {
           res.status(400).json({ success: false })
