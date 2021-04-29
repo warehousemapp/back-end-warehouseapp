@@ -1,4 +1,5 @@
 const { GoogleSpreadsheet } = require('google-spreadsheet');
+const {promisify} = require ("util")
 
 const doc = new GoogleSpreadsheet('1jVDqLQw3-3mQ4BB59cE7_kW07qInQsjQVCekdeNPa8A');
 
@@ -44,9 +45,9 @@ exports.ready = async (req, res) => {
     console.log(total, lastRow);
     console.log(rows)
 
-    const users = rows.map(({ id, image, name, username, email, password, createdAt, updatedAt, active, rowNumber}) => {
+    const users = rows.map(({ idUsers, image, name, username, email, password, createdAt, updatedAt, active, rowNumber}) => {
       return {
-        id,
+        idUsers,
         image,
         name,
         username,
@@ -76,9 +77,9 @@ exports.search2 = async (req, res) => {
 
     let limit = { limit: 50 };
 
-    let id = req.params.id;
+    let idUsers = req.params.id;
 
-    const rows = await sheet.getRows({offset:2});
+    const rows = await(sheet.getRows)();
 
     let lastRow = rows.length + 1;
 
@@ -87,9 +88,9 @@ exports.search2 = async (req, res) => {
     console.log(total, lastRow);
     console.log(rows)
 
-    const users = rows.map(({ id, image, name, username, email, password, createdAt, updatedAt, active, rowNumber}) => {
+    const users = rows.map(({ idUsers, image, name, username, email, password, createdAt, updatedAt, active, rowNumber}) => {
       return {
-        id,
+        idUsers,
         image,
         name,
         username,
@@ -102,7 +103,7 @@ exports.search2 = async (req, res) => {
       };
     });
     
-    console.log(users)
+    console.log(rows.find(idUsers=1))
     res.status(200).json(users);
   } catch (error) {
     res.status(400).json({ success: false })
