@@ -42,8 +42,9 @@ exports.ready = async (req, res) => {
     let total = await sheet.rowCount;
 
     console.log(total, lastRow);
-console.log(rows)
-    const users = rows.map(({ id, image, name, username, email, password, createdAt, updatedAt, active }) => {
+    console.log(rows)
+
+    const users = rows.map(({ id, image, name, username, email, password, createdAt, updatedAt, active, rowNumber}) => {
       return {
         id,
         image,
@@ -53,10 +54,11 @@ console.log(rows)
         password,
         createdAt,
         updatedAt,
-        active
+        active,
+        rowNumber,
       };
     });
-
+    console.log(users)
     res.status(200).json(users);
   } catch (error) {
     res.status(400).json({ success: false })
@@ -67,14 +69,24 @@ exports.search2 = async (req, res) => {
   try {
     await doc.useServiceAccountAuth(require('../credentials/google-sheets-api.json'));
     await doc.loadInfo(); // Carrega as infos da planilha
+
     const sheet = doc.sheetsByIndex[1];
-    let ul = req.params.ul;
-    await sheet.loadCells("A1:A50")
-    const cell = await sheet.getCell(ul,0)
-    console.log(cell.value)
-    console.log(sheet.cellStats);
-    res.status(200).json(cell.value);
-  } catch (error) {
+    const rows = await sheet.getRows();
+
+    let lastRow = rows.length + 1;
+
+const users=await sheet.loadCells('A1:A'+lastRow)
+
+const validIndex = [...Array(lastRow).keys()]
+
+for await(const i of validIndex){
+const cell = await sheet.getCell(1+i,0)
+let ig = cell.value
+console.log(cell.value)
+}
+res.status(200).json(lastRow);
+}
+ catch (error) {
     res.status(400).json({ success: false })
   }
 };
