@@ -58,6 +58,7 @@ exports.ready = async (req, res) => {
         rowNumber,
       };
     });
+    
     console.log(users)
     res.status(200).json(users);
   } catch (error) {
@@ -66,27 +67,44 @@ exports.ready = async (req, res) => {
 };
 
 exports.search2 = async (req, res) => {
+
   try {
     await doc.useServiceAccountAuth(require('../credentials/google-sheets-api.json'));
     await doc.loadInfo(); // Carrega as infos da planilha
 
     const sheet = doc.sheetsByIndex[1];
-    const rows = await sheet.getRows();
+
+    let limit = { limit: 50 };
+
+    let id = req.params.id;
+
+    const rows = await sheet.getRows({offset:2});
 
     let lastRow = rows.length + 1;
 
-const users=await sheet.loadCells('A1:A'+lastRow)
+    let total = await sheet.rowCount;
 
-const validIndex = [...Array(lastRow).keys()]
+    console.log(total, lastRow);
+    console.log(rows)
 
-for await(const i of validIndex){
-const cell = await sheet.getCell(1+i,0)
-let ig = cell.value
-console.log(cell.value)
-}
-res.status(200).json(lastRow);
-}
- catch (error) {
+    const users = rows.map(({ id, image, name, username, email, password, createdAt, updatedAt, active, rowNumber}) => {
+      return {
+        id,
+        image,
+        name,
+        username,
+        email,
+        password,
+        createdAt,
+        updatedAt,
+        active,
+        rowNumber,
+      };
+    });
+    
+    console.log(users)
+    res.status(200).json(users);
+  } catch (error) {
     res.status(400).json({ success: false })
   }
 };
