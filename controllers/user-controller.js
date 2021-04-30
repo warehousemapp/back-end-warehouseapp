@@ -45,9 +45,9 @@ exports.ready = async (req, res) => {
     console.log(total, lastRow);
     console.log(rows)
 
-    const users = rows.map(({ idUsers, image, name, username, email, password, createdAt, updatedAt, active, rowNumber}) => {
+    const users = rows.map(({ id, image, name, username, email, password, createdAt, updatedAt, active, rowNumber}) => {
       return {
-        idUsers,
+        id,
         image,
         name,
         username,
