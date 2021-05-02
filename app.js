@@ -48,7 +48,7 @@ app.get('/', async (req, res) => {
 
 		lRow = dados.length ;
 		console.log({ filtrados: lRow });
-		res.status(200).json({dados});
+		res.status(200).json(dados);
 	} catch (error) {
 		res.status(400).json({ success: false });
 	}
