@@ -30,7 +30,7 @@ app.get('/', async (req, res) => {
 
 		const rows = await sheet.getRows();
 
-		let lastRow = rows.length ;
+		let lastRow = rows.length;
 
 		console.log({ totalPreenchidas: lastRow });
 
@@ -43,10 +43,10 @@ app.get('/', async (req, res) => {
 					imagem,
 					nome
 				};
-			})
-			
+			})//.filter((item) => item.nome.includes(ID));
 
-		lRow = dados.length ;
+
+		lRow = dados.length;
 		console.log({ filtrados: lRow });
 		res.status(200).json(dados);
 	} catch (error) {
@@ -67,7 +67,7 @@ app.get('/user/:id', async (req, res) => {
 
 		const rows = await sheet.getRows();
 
-		let lastRow = rows.length ;
+		let lastRow = rows.length;
 
 		console.log({ totalPreenchidas: lastRow });
 
@@ -83,7 +83,7 @@ app.get('/user/:id', async (req, res) => {
 			})
 			.filter((item) => item.ID === ID);
 
-		lRow = dados.length ;
+		lRow = dados.length;
 		console.log({ filtrados: lRow });
 		res.status(200).json(dados);
 	} catch (error) {

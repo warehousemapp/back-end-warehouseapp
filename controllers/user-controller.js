@@ -1,22 +1,24 @@
 const { GoogleSpreadsheet } = require('google-spreadsheet');
-const {promisify} = require ("util")
+const { promisify } = require("util")
 
 const doc = new GoogleSpreadsheet('1jVDqLQw3-3mQ4BB59cE7_kW07qInQsjQVCekdeNPa8A');
 
 exports.create = async (req, res) => {
   try {
-    const { ID, nome } = req.body;
+    const user = req.body;
+    console.log(req.body)
+
     await doc.useServiceAccountAuth(require('../credentials/google-sheets-api.json'));
     await doc.loadInfo(); // Carrega as infos da planilha
 
-    const sheet = doc.sheetsByIndex[0];
+    const sheet = doc.sheetsByIndex[1];
 
     const rows = await sheet.getRows();
 
     let lastRow = rows.length + 1;
 
     await sheet.addRows([
-      { ID, nome }
+      user
     ]);
 
     return res.status(201).json({ ok: true });
@@ -45,7 +47,7 @@ exports.ready = async (req, res) => {
     console.log(total, lastRow);
     console.log(rows)
 
-    const users = rows.map(({ id, image, name, username, email, password, createdAt, updatedAt, active, rowNumber}) => {
+    const users = rows.map(({ id, image, name, username, email, password, createdAt, updatedAt, active, rowNumber }) => {
       return {
         id,
         image,
@@ -59,7 +61,7 @@ exports.ready = async (req, res) => {
         rowNumber,
       };
     });
-    
+
     console.log(users)
     res.status(200).json(users);
   } catch (error) {
@@ -79,7 +81,7 @@ exports.search2 = async (req, res) => {
 
     let idUsers = req.params.id;
 
-    const rows = await(sheet.getRows)();
+    const rows = await (sheet.getRows)();
 
     let lastRow = rows.length + 1;
 
@@ -88,7 +90,7 @@ exports.search2 = async (req, res) => {
     console.log(total, lastRow);
     console.log(rows)
 
-    const users = rows.map(({ idUsers, image, name, username, email, password, createdAt, updatedAt, active, rowNumber}) => {
+    const users = rows.map(({ idUsers, image, name, username, email, password, createdAt, updatedAt, active, rowNumber }) => {
       return {
         idUsers,
         image,
@@ -102,8 +104,8 @@ exports.search2 = async (req, res) => {
         rowNumber,
       };
     });
-    
-    console.log(rows.find(idUsers=1))
+
+    console.log(rows.find(idUsers = 1))
     res.status(200).json(users);
   } catch (error) {
     res.status(400).json({ success: false })
