@@ -37,17 +37,18 @@ app.get('/', async (req, res) => {
 		//console.log(rows)
 
 		const dados = rows
-			.map(({ ID, imagem, nome }) => {
+			.map(({ ID, imagem, nome, rowNumber }) => {
 				return {
 					ID,
 					imagem,
-					nome
+					nome,
+					rowNumber
 				};
-			})//.filter((item) => item.nome.includes(ID));
+			})//.filter((item) => item.nome.toLowerCase().includes(ID.toLowerCase()));
 
 
 		lRow = dados.length;
-		console.log({ filtrados: lRow });
+		console.log({ filtrados: lRow, dados });
 		res.status(200).json(dados);
 	} catch (error) {
 		res.status(400).json({ success: false });

@@ -5,7 +5,7 @@ const doc = new GoogleSpreadsheet('1jVDqLQw3-3mQ4BB59cE7_kW07qInQsjQVCekdeNPa8A'
 
 exports.create = async (req, res) => {
   try {
-    const user = req.body;
+    const { id, name } = req.body;
     console.log(req.body)
 
     await doc.useServiceAccountAuth(require('../credentials/google-sheets-api.json'));
@@ -18,7 +18,7 @@ exports.create = async (req, res) => {
     let lastRow = rows.length + 1;
 
     await sheet.addRows([
-      user
+      {id, name}
     ]);
 
     return res.status(201).json({ ok: true });
