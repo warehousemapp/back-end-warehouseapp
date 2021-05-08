@@ -26,11 +26,19 @@ app.get('/', async (req, res) => {
 
 		const sheet = doc.sheetsByIndex[0];
 
-		let limit = { limit: 50 };
+		
+  //Total de registros no banco
+  let total=sheet.rowCount;
 
-		const rows = await sheet.getRows();
+		//let limit = { limit: 50 };
 
-		let lastRow = rows.length;
+		let page = Number(req.query.page)||1;
+		let limit = Number(req.query.per_page)||10;
+		//let search = req.query.search
+
+		const rows = await sheet.getRows({offset:(page*limit)-limit,limit:limit});
+
+		let lastRow = rows.length-1;
 
 		console.log({ totalPreenchidas: lastRow });
 
@@ -44,11 +52,12 @@ app.get('/', async (req, res) => {
 					nome,
 					rowNumber
 				};
-			})//.filter((item) => item.nome.toLowerCase().includes(ID.toLowerCase()));
+			})//.filter((item) => item.nome.toLowerCase().includes(search.toLowerCase()));
 
 
 		lRow = dados.length;
-		console.log({ filtrados: lRow, dados });
+		//console.log({ filtrados: lRow, dados });
+		console.log({ Total: total });
 		res.status(200).json(dados);
 	} catch (error) {
 		res.status(400).json({ success: false });
@@ -85,7 +94,8 @@ app.get('/user/:id', async (req, res) => {
 			.filter((item) => item.ID === ID);
 
 		lRow = dados.length;
-		console.log({ filtrados: lRow });
+		//console.log({ filtrados: lRow });
+		console.log({ Total: total });
 		res.status(200).json(dados);
 	} catch (error) {
 		res.status(400).json({ success: false });
