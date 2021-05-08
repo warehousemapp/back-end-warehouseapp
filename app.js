@@ -85,7 +85,7 @@ app.get("/user/:id", async (req, res) => {
 
     let limit = { limit: 50 };
 
-    let ID = req.params.id;
+    let ID = +req.params.id;
 
     const rows = await sheet.getRows();
 
@@ -103,7 +103,7 @@ app.get("/user/:id", async (req, res) => {
           nome
         };
       })
-      .filter((item) => item.ID === ID);
+      .filter((item) => +item.ID === +ID);
 
     lRow = dados.length;
     //console.log({ filtrados: lRow });
