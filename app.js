@@ -42,7 +42,7 @@ app.get("/", async (req, res) => {
     //let limit = { limit: 50 };
 
     let page = Number(req.query.page) || 1;
-    let limit = Number(req.query.per_page) || 10;
+    let limit = Number(req.query.per_page) || total;
     //let search = req.query.search
 
     const rows = await sheet.getRows({
