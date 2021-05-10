@@ -102,7 +102,7 @@ app.get('/teste', async (req, res) => {
     }
 
     if (!req.query.per_page) {
-      var limit = total;
+      var limit = total-1;
     } else {
       var limit = Number(req.query.per_page);
     }
@@ -114,7 +114,7 @@ app.get('/teste', async (req, res) => {
     }
 
     if (req.query.search) {
-      var limit = total;
+      var limit = total-1;
       var page = 1;
     }
 
