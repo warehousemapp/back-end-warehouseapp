@@ -78,7 +78,7 @@ app.get('/', async (req, res) => {
   }
 });
 
-app.get('/teste/:id?', async (req, res) => {
+app.get('/teste', async (req, res) => {
   try {
     await doc.useServiceAccountAuth(
       require('./credentials/google-sheets-api.json')
@@ -102,7 +102,7 @@ app.get('/teste/:id?', async (req, res) => {
     }
 
     if (!req.query.per_page) {
-      var limit = total;
+      var limit = 10;
     } else {
       var limit = Number(req.query.per_page);
     }
@@ -155,7 +155,7 @@ app.get('/teste/:id?', async (req, res) => {
   }
 });
 
-app.get('/user/:id', async (req, res) => {
+app.get('/user/:id?', async (req, res) => {
   try {
     await doc.useServiceAccountAuth(
       require('./credentials/google-sheets-api.json')
@@ -182,7 +182,10 @@ app.get('/user/:id', async (req, res) => {
           rowNumber
         };
       })
-      .filter((item) => +item.ID === +ID);
+      .filter((item) => +item.ID === +ID)
+      .reduce((acc, item) => {
+        +item.ID === +ID;
+      });
 
     res.status(200).json(dados);
   } catch (error) {
