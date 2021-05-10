@@ -102,7 +102,7 @@ app.get('/teste', async (req, res) => {
     }
 
     if (!req.query.per_page) {
-      var limit = 10;
+      var limit = total;
     } else {
       var limit = Number(req.query.per_page);
     }
