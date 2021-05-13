@@ -130,7 +130,7 @@ app.get('/teste', async (req, res) => {
 
     //console.log(rows)
 
-    const dados = test
+    const dados=rows
       .map(({ ID, imagem, nome, rowNumber, slug }) => {
         return {
           ID,
@@ -172,7 +172,7 @@ app.get('/user/:id?', async (req, res) => {
 
     const test = [...rows];
 
-    const dados = test
+    const dados = rows
       .map(({ ID, imagem, nome, rowNumber, slug }) => {
         return {
           ID,
