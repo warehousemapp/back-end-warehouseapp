@@ -111,16 +111,14 @@ app.get('/teste', async (req, res) => {
       var search = '';
     } else {
       var search = req.query.search;
-    }
-
-    if (req.query.search) {
       var limit = total-1;
       var page = 1;
     }
 
     const rows = await sheet.getRows({
-      offset: page * limit - limit,
-      limit: limit
+     // limit: limit,
+     // offset: page * limit - limit
+      
     });
     const test = [...rows];
     let lastRow = rows.length - 1;
