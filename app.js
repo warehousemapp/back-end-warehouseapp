@@ -94,6 +94,7 @@ app.get('/teste', async (req, res) => {
 
     //let page = Number(req.query.page) || 1;
     //let limit = Number(req.query.per_page) || total;
+    //let search = req.query.search || '';
 
     if (!req.query.page) {
       var page = 1;
@@ -102,7 +103,7 @@ app.get('/teste', async (req, res) => {
     }
 
     if (!req.query.per_page) {
-      var limit = total-1;
+      var limit = total - 1;
     } else {
       var limit = Number(req.query.per_page);
     }
@@ -111,14 +112,13 @@ app.get('/teste', async (req, res) => {
       var search = '';
     } else {
       var search = req.query.search;
-      var limit = total-1;
+      var limit = total - 1;
       var page = 1;
     }
 
     const rows = await sheet.getRows({
-     // limit: limit,
-     // offset: page * limit - limit
-      
+      // limit: limit,
+      // offset: page * limit - limit
     });
     const test = [...rows];
     let lastRow = rows.length - 1;
@@ -128,7 +128,88 @@ app.get('/teste', async (req, res) => {
 
     //console.log(rows)
 
-    const dados=rows
+    const dados = rows
+      .map(({ ID, imagem, nome, rowNumber, slug }) => {
+        return {
+          ID,
+          imagem,
+          nome,
+          slug,
+          rowNumber
+        };
+      })
+      .filter((item) =>
+        item.nome
+          .toLowerCase()
+          .includes(search.toLowerCase())
+      );
+
+    lRow = dados.length;
+    console.log({ filtrados: lRow });
+    console.log({ Total: total });
+    res.status(200).json(dados);
+  } catch (error) {
+    res.status(400).json({ success: false });
+  }
+});
+
+app.get('/app', async (req, res) => {
+  try {
+    await doc.useServiceAccountAuth(
+      require('./credentials/google-sheets-api.json')
+    );
+    await doc.loadInfo(); // Carrega as infos da planilha
+
+    const sheet = doc.sheetsByIndex[0];
+
+    //Total de registros no banco
+    let total = Number(sheet.rowCount-1);
+
+    //let limit = { limit: 50 };
+
+    var page = Number(req.query.page) || 1;
+    var limit = Number(req.query.per_page) || total;
+    if (req.query.search) {
+      var search = req.query.search;
+      var limit = total;
+      var page = 1;  
+    } else {
+      var search = '';
+    }
+
+/*     if (!req.query.page) {
+      var page = 1;
+    } else {
+      var page = Number(req.query.page);
+    }
+
+    if (!req.query.per_page) {
+      var limit = total - 1;
+    } else {
+      var limit = Number(req.query.per_page);
+    }
+
+    if (!req.query.search) {
+      var search = '';
+    } else {
+      var search = req.query.search;
+      var limit = total - 1;
+      var page = 1;
+    } */
+
+    const rows = await sheet.getRows({
+      limit: limit,
+      offset: page * limit - limit,
+    });
+    const test = [...rows];
+    let lastRow = rows.length;
+
+    console.log({ totalPreenchidas: lastRow });
+    console.log({ Total: total });
+
+    //console.log(rows)
+
+    const dados = rows
       .map(({ ID, imagem, nome, rowNumber, slug }) => {
         return {
           ID,
